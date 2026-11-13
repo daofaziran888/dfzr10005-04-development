@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Overview from '@/views/Overview.vue'
 const Lifecycle = () => import('@/views/lifecycle/index.vue')
 const Cost = () => import('@/views/cost/index.vue')
+const CostTrial = () => import('@/views/cost/trial.vue')
 const Heatmap = () => import('@/views/heatmap/index.vue')
 const Dag = () => import('@/views/dag/index.vue')
 const Sla = () => import('@/views/sla/index.vue')
@@ -24,6 +25,7 @@ const router = createRouter({
     { path: '/', name: 'overview', component: Overview },
     { path: '/lifecycle', name: 'lifecycle', component: Lifecycle },
     { path: '/cost', name: 'cost', component: Cost },
+    { path: '/cost/trial', name: 'cost-trial', component: CostTrial },
     { path: '/heatmap', name: 'heatmap', component: Heatmap },
     { path: '/dag', name: 'dag', component: Dag },
     { path: '/sla', name: 'sla', component: Sla },

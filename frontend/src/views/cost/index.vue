@@ -6,6 +6,7 @@
         <p class="page-desc">维护存储成本的扫描范围、冷数据识别与优化建议追踪，为存储成本优化提供可审计的数据工程流程。</p>
       </div>
       <div class="page-actions">
+        <RouterLink class="btn primary" to="/cost/trial">冷数据成本试算</RouterLink>
         <button class="btn primary" type="button" @click="openCreate">登记成本分析报告</button>
         <button class="btn" type="button" @click="exportRows">导出存储成本优化清单</button>
       </div>
@@ -36,7 +37,7 @@
       </thead>
       <tbody>
         <tr v-for="row in rows" :key="String(row.id)">
-          <td v-for="column in columns" :key="column">{{ row[column] ?? '—' }}</td>
+          <td v-for="column in columns" :key="column">{{ row[column] || '—' }}</td>
           <td class="row-actions">
             <button
               v-for="action in actions"
@@ -70,7 +71,7 @@ import { request } from '@/api/client'
 type Row = Record<string, string | number | null>
 
 const ENDPOINT = '/api/cost'
-const columns = ["报告编号", "分析范围", "存储总量", "冷数据占比", "优化建议", "预计节省", "执行状态", "生成时间"]
+const columns = ["报告编号", "分析范围", "存储总量", "冷数据占比", "优化建议", "预计节省", "执行状态", "生成时间", "口径版本", "演算快照"]
 const actions = ["开始分析", "执行优化", "归档报告"]
 const statuses = ["草稿", "分析中", "已生成", "已执行"]
 const stats = [{"label": "成本分析报告总数", "value": 0}, {"label": "已生成报告", "value": 0}, {"label": "已执行报告", "value": 0}]

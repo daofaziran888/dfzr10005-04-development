@@ -30,6 +30,25 @@ class HeatmapService:
         start = max(page - 1, 0) * size
         return rows[start:start + size], total
 
+    def list_batches(self) -> list[dict[str, Any]]:
+        """按采样批次聚合热度记录，供热度页追溯每个批次被哪些演算快照引用。"""
+        batches: dict[str, dict[str, Any]] = {}
+        for row in store.rows(MODULE):
+            name = str(row.get("采样批次") or "未分批")
+            batch = batches.setdefault(name, {
+                "采样批次": name,
+                "记录数": 0,
+                "表清单": [],
+                "采样时间": row.get("采样时间"),
+                "引用快照": [],
+            })
+            batch["记录数"] += 1
+            batch["表清单"].append(row.get("表名称"))
+            for snap in row.get("试算引用") or []:
+                if snap not in batch["引用快照"]:
+                    batch["引用快照"].append(snap)
+        return sorted(batches.values(), key=lambda item: item["采样批次"], reverse=True)
+
     def get_entry(self, entry_id: int) -> dict[str, Any] | None:
         return store.find(MODULE, entry_id)
 

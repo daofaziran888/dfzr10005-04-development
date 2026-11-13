@@ -36,7 +36,7 @@
       </thead>
       <tbody>
         <tr v-for="row in rows" :key="String(row.id)">
-          <td v-for="column in columns" :key="column">{{ row[column] ?? '—' }}</td>
+          <td v-for="column in columns" :key="column">{{ formatCell(row[column]) }}</td>
           <td class="row-actions">
             <button
               v-for="action in actions"
@@ -70,10 +70,16 @@ import { request } from '@/api/client'
 type Row = Record<string, string | number | null>
 
 const ENDPOINT = '/api/tier'
-const columns = ["分层编号", "分层名称", "层级别名", "数据粒度", "存储格式", "压缩策略", "访问模式", "分层状态"]
+const columns = ["分层编号", "分层名称", "层级别名", "数据粒度", "存储格式", "压缩策略", "访问模式", "存储单价", "容量水位", "成本报告引用", "分层状态"]
 const actions = ["定义分层", "废弃分层", "归档分层"]
 const statuses = ["草稿", "已定义", "生效中", "已废弃"]
 const stats = [{"label": "分层定义总数", "value": 0}, {"label": "已定义分层", "value": 0}, {"label": "生效中分层", "value": 0}]
+
+function formatCell(value: unknown): string {
+  if (Array.isArray(value)) return value.length ? value.join('、') : '—'
+  if (value === null || value === undefined || value === '') return '—'
+  return String(value)
+}
 
 const rows = ref<Row[]>([])
 const total = ref(0)
